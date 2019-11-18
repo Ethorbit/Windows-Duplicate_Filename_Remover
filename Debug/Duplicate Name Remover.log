@@ -1,2 +1,3 @@
-﻿  main.cpp
+﻿  DuplicateFind.cpp
+C:\Users\ETHORBIT.DESKTOP-VGMLUB4\source\repos\Duplicate Name Remover\DuplicateFind.cpp(10,20): warning C4018: '<': signed/unsigned mismatch
   Duplicate Name Remover.vcxproj -> C:\Users\ETHORBIT.DESKTOP-VGMLUB4\source\repos\Duplicate Name Remover\Debug\Duplicate Name Remover.exe
