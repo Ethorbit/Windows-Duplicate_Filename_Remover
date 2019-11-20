@@ -9,6 +9,9 @@ AddressDuplicates::AddressDuplicates(DuplicateFind &finder):objRef(finder) {
 	if (duplicateAmount > 0) {
 		GetUserOption();
 	}
+
+	std::cout << "Hit any key to exit" << std::endl;
+	std::cin.get();
 }
 
 void AddressDuplicates::GetUserOption() {
@@ -71,14 +74,14 @@ void AddressDuplicates::MoveFiles() {
 		}
 	}
 
-	std::cin.get();
+	std::cout << "Hit any key to exit" << std::endl;
 	std::cin.get();
 }
 
 void AddressDuplicates::RemoveFiles() {
 	std::string userResp;
 	std::cout << "ARE YOU SURE? This will delete all files that the program deems as duplicate.\n";
-	std::cout << "If you are unsure, do CTRL + C to cancel and rerun the program but choose the move option next time." << std::endl;
+	std::cout << "If you are unsure, do CTRL + C to cancel and rerun the program but choose the move option instead." << std::endl;
 	std::cout << "Type yes to start deletions" << std::endl;
 	std::cin >> userResp;
 
@@ -92,4 +95,7 @@ void AddressDuplicates::RemoveFiles() {
 			}
 		}
 	}
+
+	std::cout << "Hit any key to exit" << std::endl;
+	std::cin.get();
 }

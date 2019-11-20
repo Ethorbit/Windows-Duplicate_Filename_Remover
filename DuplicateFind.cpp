@@ -16,7 +16,6 @@ DuplicateFind::DuplicateFind(const char path[], int FindType):FileDir(path) {
 	}
 
 	std::string ArchivePath(StrPath);
-	std::cout << ArchivePath << " to old " << StrPath << std::endl;
 	
 	/* Check if the directory ends with a back or forward slash */
 	if (StrPath.rfind("\\") == StrPath.length() - 1 || StrPath.rfind("/") == StrPath.length() - 1) {
@@ -45,16 +44,19 @@ DuplicateFind::DuplicateFind(const char path[], int FindType):FileDir(path) {
 	if (FindType == 0) {
 		std::cout << "Files with (num) or - Copy will be ASSUMED as duplicate files! \n";
 		std::cout << "Do CTRL + C to cancel and pass safe as the second argument for full-proof duplicate checking! \n";
-		ms = 5000;
+		ms = 3000;
 	}
 	else {
 		std::cout << "Using safe mode checking is much slower, consider using normal mode instead\n" << std::endl;
 	}
-	ms = 0;
 
 	Wait wait(ms);
 
 	std::cout << "Searching for duplicate files in: " << path << std::endl;
+
+	while (FindNextFileA(FileHandle, &FileData) == 0) {
+		std::cout << "Failed \n";
+	}
 
 	while (FindNextFileA(FileHandle, &FileData) != 0) {
 		char CharFilename[FILENAME_MAX];
@@ -104,7 +106,7 @@ DuplicateFind::DuplicateFind(const char path[], int FindType):FileDir(path) {
 		
 		if (FindType == 1) {
 			for (int i = 0; i < AllFilenames.size(); i++) {
-				if (AllFilenames.at(i) == StrFilename + " ") {
+				if (AllFilenames.at(i) == StrFilename) {
 					DuplicateFiles.push_back(CharFilename);
 					std::cout << "Duplicate file found: " << CharFilename << "\n";
 					break;
@@ -112,8 +114,6 @@ DuplicateFind::DuplicateFind(const char path[], int FindType):FileDir(path) {
 			}
 
 			AllFilenames.push_back(StrFilename);
-
-			std::cin.get();
 		}
 	}
 }
