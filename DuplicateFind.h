@@ -1,24 +1,21 @@
 #pragma once
+#include <vector>
 #include <string>
 
 class DuplicateFind
 {	
 	public:
 		DuplicateFind(const char path[]);
-		
-		std::string DuplicateFiles() {
-			return DuplicateNames;
+
+		std::vector<std::string>* GetPossibleDuplicates() {
+			return &PossibleDuplicates;
 		}
 
-		int DuplicateAmount() {
-			return duplicateFiles;
+		std::vector<std::string>* GetAllFilenames() {
+			return &AllFilenames;
 		}
 	private:
-		void GetUserOption();
-		void MoveFiles();
-		void RemoveFiles();
-		std::string DuplicateNames;
-		std::string AllFilenames;
-		int duplicateFiles = 0;
+		std::vector<std::string> PossibleDuplicates;
+		std::vector<std::string> AllFilenames;
 };
 

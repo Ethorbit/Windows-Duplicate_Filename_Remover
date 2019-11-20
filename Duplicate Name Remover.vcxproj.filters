@@ -24,12 +24,18 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="AddressDuplicates.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="INI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="DuplicateFind.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AddressDuplicates.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
