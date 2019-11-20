@@ -11,5 +11,5 @@ Drag & drop the folder you want to check on the executable or run the program in
 Arguments: 
 * First argument: the directory you want it to search _(C:/Desktop/bob/CheckThis)_
 
-* Second argument: safe 
+* Second argument (Optional): safe 
 Passing the word safe as the second argument will ensure that a file will only be marked as duplicate if there is another file with the same name (The default mode will mark files as duplicate for simply having (number) or - Copy at the end because it's much faster)
