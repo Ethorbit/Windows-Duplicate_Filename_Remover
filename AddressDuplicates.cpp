@@ -1,23 +1,14 @@
 #include "AddressDuplicates.h"
 #include <iostream>
+#include <Windows.h>
+#include "Wait.h"
 
-AddressDuplicates::AddressDuplicates(DuplicateFind &finder) {
-	int duplicateFiles = 0;
-	std::vector<std::string> *checkFiles = finder.GetPossibleDuplicates();
-	std::vector<std::string> *allFiles = finder.GetAllFilenames();
-	
-	if (duplicateFiles > 0) {
-		GetUserOption(); // Give them options about what to do with these duplicate files
+AddressDuplicates::AddressDuplicates(DuplicateFind &finder):objRef(finder) {
+	int duplicateAmount = finder.GetDuplicates()->size();
+	std::cout << "Total duplicate filenames: " << duplicateAmount << "\n\n";
+	if (duplicateAmount > 0) {
+		GetUserOption();
 	}
-
-	for (int a = 0; a < checkFiles->size(); a++) {
-		
-		for (int b = 0; b < allFiles->size(); b++) {
-			std::cout << checkFiles->size() << checkFiles->at(a) << "\n";
-		}
-	}
-
-	std::cout << "All files successfully scanned. Total duplicate filenames: " << duplicateFiles << std::endl;
 }
 
 void AddressDuplicates::GetUserOption() {
@@ -32,7 +23,6 @@ void AddressDuplicates::GetUserOption() {
 		case 1:
 			MoveFiles();
 		break;
-
 		// They want the duplicate files removed:
 		case 2:
 			RemoveFiles();
@@ -47,9 +37,59 @@ void AddressDuplicates::GetUserOption() {
 
 void AddressDuplicates::MoveFiles() {
 	std::string newPath;
-	std::cout << "What directory path should the duplicate files be moved to?" << std::endl;
+	std::cout << "What directory path should the duplicate files get moved to?" << std::endl;
 	std::cin >> newPath;
+
+	WIN32_FIND_DATAA FileData;
+	HANDLE FileHandle = FindFirstFileA(newPath.c_str(), &FileData);
+
+	/* Make sure the directory */
+	while (FileHandle == INVALID_HANDLE_VALUE) {
+		std::cout << "That directory didn't work!" << std::endl;
+		std::cout << "What directory path should the duplicate files be moved to?" << std::endl;
+		std::cin >> newPath;
+		FileHandle = FindFirstFileA(newPath.c_str(), &FileData);
+	}
+
+	/* Remove quotes from the new directory */
+	for (int i = 0; i < newPath.length(); i++) {
+		char quot = '"';
+		if (newPath.at(i) == quot) {
+			newPath.erase(i, i + 1);
+		}
+	}
+
+	for (int i = 0; i < objRef.GetDuplicates()->size(); i++) {
+		std::string FilePath = objRef.getDir() + objRef.GetDuplicates()->at(i);
+		std::string NewPath = newPath + "/" + objRef.GetDuplicates()->at(i);
+		LPCSTR FixedPath = FilePath.c_str();
+		LPCSTR FixedNewPath = NewPath.c_str();
+		BOOL FileMove = MoveFileExA(FixedPath, FixedNewPath, MOVEFILE_COPY_ALLOWED);
+		
+		if (FileMove != 0) {
+			std::cout << "Moved " << objRef.GetDuplicates()->at(i) << " to " << NewPath << "\n";
+		}
+	}
+
+	std::cin.get();
+	std::cin.get();
 }
 
 void AddressDuplicates::RemoveFiles() {
+	std::string userResp;
+	std::cout << "ARE YOU SURE? This will delete all files that the program deems as duplicate.\n";
+	std::cout << "If you are unsure, do CTRL + C to cancel and rerun the program but choose the move option next time." << std::endl;
+	std::cout << "Type yes to start deletions" << std::endl;
+	std::cin >> userResp;
+
+	if (userResp == "yes") {
+		for (int i = 0; i < objRef.GetDuplicates()->size(); i++) {
+			std::string FilePath = objRef.getDir() + objRef.GetDuplicates()->at(i);
+			LPCSTR FixedPath = FilePath.c_str();
+			BOOL DelFile = DeleteFileA(FixedPath);
+			if (DelFile != 0) {
+				std::cout << "Deleted " << objRef.GetDuplicates()->at(i) << " from " << FilePath << "\n";
+			}
+		}
+	}
 }

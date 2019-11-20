@@ -4,10 +4,11 @@ class AddressDuplicates
 {
 	public:
 		AddressDuplicates(DuplicateFind &finder);
-
+		
 	private:
 		void GetUserOption();
 		void MoveFiles();
 		void RemoveFiles();
+		DuplicateFind &objRef;
 };
 

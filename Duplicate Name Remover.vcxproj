@@ -156,12 +156,12 @@
     <ClCompile Include="AddressDuplicates.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="DuplicateFind.cpp" />
-    <ClCompile Include="INI.cpp" />
+    <ClCompile Include="Wait.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AddressDuplicates.h" />
     <ClInclude Include="DuplicateFind.h" />
-    <ClInclude Include="INI.h" />
+    <ClInclude Include="Wait.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

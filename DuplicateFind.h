@@ -5,17 +5,22 @@
 class DuplicateFind
 {	
 	public:
-		DuplicateFind(const char path[]);
+		DuplicateFind(const char path[], int FindType);
 
-		std::vector<std::string>* GetPossibleDuplicates() {
-			return &PossibleDuplicates;
+		std::vector<std::string>* GetDuplicates() {
+			return &DuplicateFiles;
 		}
 
 		std::vector<std::string>* GetAllFilenames() {
 			return &AllFilenames;
 		}
+
+		std::string getDir() {
+			return FileDir;
+		}
 	private:
-		std::vector<std::string> PossibleDuplicates;
+		std::vector<std::string> DuplicateFiles;
 		std::vector<std::string> AllFilenames;
+		std::string FileDir;
 };
 
