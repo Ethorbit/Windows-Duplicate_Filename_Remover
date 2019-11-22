@@ -1,6 +1,7 @@
 #include "AddressDuplicates.h"
 #include <iostream>
 #include <Windows.h>
+#include "Shlwapi.h"
 #include "fixString.h"
 
 AddressDuplicates::AddressDuplicates(DuplicateFind &finder):objRef(finder) {
@@ -51,18 +52,16 @@ void AddressDuplicates::MoveFiles() {
 		fixStr.removeSlash(strToFix);
 	}
 
-	WIN32_FIND_DATAA FileData;
-	HANDLE FileHandle = FindFirstFileA(strToFix.c_str(), &FileData);
-	
-	while (FileHandle == INVALID_HANDLE_VALUE && strlen(newPath) > 0) {
-		std::cout << "The directory: " << strToFix << " didn't work!" << std::endl;
+	WIN32_FIND_DATAA FindData;
+	HANDLE FindFile = FindFirstFileA(strToFix.c_str(), &FindData);
+	while (FindFile == INVALID_HANDLE_VALUE) {
+		std::cout << "The directory: " << newPath << " didn't work!" << std::endl;
 		std::cout << "What directory path should the duplicate files be moved to?" << std::endl;
 		std::cin.getline(newPath, sizeof(newPath));
-		strToFix = newPath;
 		fixString fixStr;
 		fixStr.removeQuotes(strToFix);
 		fixStr.removeSlash(strToFix);
-		FileHandle = FindFirstFileA(strToFix.c_str(), &FileData);
+		FindFile = FindFirstFileA(strToFix.c_str(), &FindData);
 	}
 
 	for (int i = 0; i < objRef.GetDuplicates()->size(); i++) {
@@ -76,7 +75,7 @@ void AddressDuplicates::MoveFiles() {
 		
 		if (FileMove != 0) {
 			std::cout << "Moved " << objRef.GetDuplicates()->at(i) << " to " << NewPath << "\n";
-		} 
+		}
 	}
 }
 
