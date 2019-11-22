@@ -27,6 +27,9 @@
     <ClCompile Include="Wait.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="fixString.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DuplicateFind.h">
@@ -36,6 +39,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Wait.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="fixString.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

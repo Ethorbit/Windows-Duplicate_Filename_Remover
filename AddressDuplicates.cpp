@@ -1,7 +1,7 @@
 #include "AddressDuplicates.h"
 #include <iostream>
 #include <Windows.h>
-#include "Wait.h"
+#include "fixString.h"
 
 AddressDuplicates::AddressDuplicates(DuplicateFind &finder):objRef(finder) {
 	int duplicateAmount = finder.GetDuplicates()->size();
@@ -39,43 +39,45 @@ void AddressDuplicates::GetUserOption() {
 }
 
 void AddressDuplicates::MoveFiles() {
-	std::string newPath;
-	std::cout << "What directory path should the duplicate files get moved to?" << std::endl;
-	std::cin >> newPath;
+	char newPath[FILENAME_MAX] = "";
+	std::string strToFix(newPath);
 
-	WIN32_FIND_DATAA FileData;
-	HANDLE FileHandle = FindFirstFileA(newPath.c_str(), &FileData);
-
-	/* Make sure the directory */
-	while (FileHandle == INVALID_HANDLE_VALUE) {
-		std::cout << "That directory didn't work!" << std::endl;
-		std::cout << "What directory path should the duplicate files be moved to?" << std::endl;
-		std::cin >> newPath;
-		FileHandle = FindFirstFileA(newPath.c_str(), &FileData);
+	std::cout << "What directory path should the duplicate files be moved to?" << std::endl;
+	while (strlen(newPath) == 0) {
+		std::cin.getline(newPath, sizeof(newPath));
+		strToFix = newPath;
+		fixString fixStr;
+		fixStr.removeQuotes(strToFix);
+		fixStr.removeSlash(strToFix);
 	}
 
-	/* Remove quotes from the new directory */
-	for (int i = 0; i < newPath.length(); i++) {
-		char quot = '"';
-		if (newPath.at(i) == quot) {
-			newPath.erase(i, i + 1);
-		}
+	WIN32_FIND_DATAA FileData;
+	HANDLE FileHandle = FindFirstFileA(strToFix.c_str(), &FileData);
+	
+	while (FileHandle == INVALID_HANDLE_VALUE && strlen(newPath) > 0) {
+		std::cout << "The directory: " << strToFix << " didn't work!" << std::endl;
+		std::cout << "What directory path should the duplicate files be moved to?" << std::endl;
+		std::cin.getline(newPath, sizeof(newPath));
+		strToFix = newPath;
+		fixString fixStr;
+		fixStr.removeQuotes(strToFix);
+		fixStr.removeSlash(strToFix);
+		FileHandle = FindFirstFileA(strToFix.c_str(), &FileData);
 	}
 
 	for (int i = 0; i < objRef.GetDuplicates()->size(); i++) {
+		std::string fixNewPath(strToFix);
 		std::string FilePath = objRef.getDir() + objRef.GetDuplicates()->at(i);
-		std::string NewPath = newPath + "/" + objRef.GetDuplicates()->at(i);
+		std::string NewPath = fixNewPath + "/" + objRef.GetDuplicates()->at(i);
+
 		LPCSTR FixedPath = FilePath.c_str();
 		LPCSTR FixedNewPath = NewPath.c_str();
 		BOOL FileMove = MoveFileExA(FixedPath, FixedNewPath, MOVEFILE_COPY_ALLOWED);
 		
 		if (FileMove != 0) {
 			std::cout << "Moved " << objRef.GetDuplicates()->at(i) << " to " << NewPath << "\n";
-		}
+		} 
 	}
-
-	std::cout << "Hit any key to exit" << std::endl;
-	std::cin.get();
 }
 
 void AddressDuplicates::RemoveFiles() {

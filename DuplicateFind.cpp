@@ -4,18 +4,13 @@
 #include <Shlwapi.h>
 #include <regex>
 #include "Wait.h"
+#include "fixString.h"
 
 DuplicateFind::DuplicateFind(const char path[], int FindType):FileDir(path) {
 	std::string StrPath(path);
-	/* Find all quotation marks and remove them: */
-	for (int i = 0; i < StrPath.length(); i++) {
-		char quot = '"';
-		if (StrPath.at(i) == quot) {
-			StrPath.erase(i, i + 1);
-		}
-	}
-
 	std::string ArchivePath(StrPath);
+	fixString fix;
+	fix.removeQuotes(StrPath);
 	
 	/* Check if the directory ends with a back or forward slash */
 	if (StrPath.rfind("\\") == StrPath.length() - 1 || StrPath.rfind("/") == StrPath.length() - 1) {
