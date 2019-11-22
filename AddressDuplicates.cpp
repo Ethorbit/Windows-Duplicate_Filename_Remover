@@ -11,7 +11,7 @@ AddressDuplicates::AddressDuplicates(DuplicateFind &finder):objRef(finder) {
 		GetUserOption();
 	}
 
-	std::cout << "Hit any key to exit" << std::endl;
+	std::cout << "Hit enter to exit" << std::endl;
 	std::cin.get();
 }
 
@@ -97,6 +97,6 @@ void AddressDuplicates::RemoveFiles() {
 		}
 	}
 
-	std::cout << "Hit any key to exit" << std::endl;
+	std::cout << "Hit enter to exit" << std::endl;
 	std::cin.get();
 }
